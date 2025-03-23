@@ -23,16 +23,21 @@ const float GROWTH_RATE = 2.0;
 // 最大半径（画面の対角線の長さより少し大きく）
 const float MAX_RADIUS = sqrt(SCREEN_WIDTH * SCREEN_WIDTH + SCREEN_HEIGHT * SCREEN_HEIGHT) / 1.5;
 
+// スプライト（ダブルバッファリング用）
+TFT_eSprite sprite = TFT_eSprite(&M5.Lcd);
+
 void setup() {
   // M5Stack初期化
   M5.begin();
   
-  // 画面を黒で初期化
-  M5.Lcd.fillScreen(BLACK);
-  M5.Lcd.setTextColor(WHITE);
-  M5.Lcd.setTextSize(2);
-  M5.Lcd.setCursor(20, 110);
-  M5.Lcd.println("Touch the screen to start");
+  // スプライトの初期化
+  sprite.createSprite(SCREEN_WIDTH, SCREEN_HEIGHT);
+  sprite.fillSprite(BLACK);
+  sprite.setTextColor(WHITE);
+  sprite.setTextSize(2);
+  sprite.setCursor(20, 110);
+  sprite.println("Touch the screen to start");
+  sprite.pushSprite(0, 0);
   
   // 円を非アクティブに設定
   circle.active = false;
@@ -51,39 +56,44 @@ void loop() {
     circle.y = pos.y;
     circle.radius = 0;
     // ランダムな色を生成 (RGB)
-    circle.color = M5.Lcd.color565(
+    circle.color = sprite.color565(
       random(256),  // R (0-255)
       random(256),  // G (0-255)
       random(256)   // B (0-255)
     );
     circle.active = true;
     
-    // 画面をクリア
-    M5.Lcd.fillScreen(BLACK);
+    // スプライトをクリア
+    sprite.fillSprite(BLACK);
+    sprite.pushSprite(0, 0);
   }
   
   // アクティブな円を拡大して描画
   if (circle.active) {
-    // 前のフレームの円を消去（黒で上書き）
-    M5.Lcd.fillCircle(circle.x, circle.y, circle.radius, BLACK);
+    // スプライトをクリア
+    sprite.fillSprite(BLACK);
     
     // 半径を増加
     circle.radius += GROWTH_RATE;
     
-    // 新しい円を描画
-    M5.Lcd.fillCircle(circle.x, circle.y, circle.radius, circle.color);
+    // 新しい円をスプライトに描画
+    sprite.fillCircle(circle.x, circle.y, circle.radius, circle.color);
+    
+    // スプライトを画面に表示
+    sprite.pushSprite(0, 0);
     
     // 円が画面を埋め尽くしたかチェック
     if (circle.radius >= MAX_RADIUS) {
       // 少し待機
       delay(500);
       
-      // 画面をクリアして初期状態に戻す
-      M5.Lcd.fillScreen(BLACK);
-      M5.Lcd.setTextColor(WHITE);
-      M5.Lcd.setTextSize(2);
-      M5.Lcd.setCursor(20, 110);
-      M5.Lcd.println("Touch the screen to start");
+      // スプライトをクリアして初期状態に戻す
+      sprite.fillSprite(BLACK);
+      sprite.setTextColor(WHITE);
+      sprite.setTextSize(2);
+      sprite.setCursor(20, 110);
+      sprite.println("Touch the screen to start");
+      sprite.pushSprite(0, 0);
       
       // 円を非アクティブに設定
       circle.active = false;
