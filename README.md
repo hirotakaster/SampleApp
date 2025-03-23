@@ -17,41 +17,41 @@ M5Stack Core2向けのインタラクティブなタッチアプリケーショ�
 
 ## 必要な環境
 
-- [PlatformIO](https://platformio.org/) または [Arduino IDE](https://www.arduino.cc/en/software)
+- [Arduino IDE](https://www.arduino.cc/en/software)
 - [M5Stack Core2](https://shop.m5stack.com/products/m5stack-core2-esp32-iot-development-kit)
 - [M5Core2ライブラリ](https://github.com/m5stack/M5Core2)
+- [ESP32ボード定義](https://github.com/espressif/arduino-esp32)
 
 ## インストール方法
-
-### PlatformIOを使用する場合
-
-1. このリポジトリをクローン
-   ```
-   git clone https://github.com/yourusername/SampleApp.git
-   ```
-
-2. PlatformIOでプロジェクトを開く
-
-3. ビルドしてM5Stack Core2にアップロード
-   ```
-   platformio run --target upload
-   ```
 
 ### Arduino IDEを使用する場合
 
 1. このリポジトリをクローン
    ```
-   git clone https://github.com/yourusername/SampleApp.git
+   git clone https://github.com/hirotakaster/SampleApp.git
    ```
 
-2. Arduino IDEでSampleApp.inoを開く
+2. Arduino IDEをインストール
+   - [Arduino IDE](https://www.arduino.cc/en/software)からダウンロードしてインストール
 
-3. M5Core2ライブラリをインストール
+3. ESP32ボード定義をインストール
+   - ファイル > 環境設定 > 追加のボードマネージャのURL に以下を追加:
+     ```
+     https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+     ```
+   - ツール > ボード > ボードマネージャ から「esp32」を検索してインストール
+
+4. M5Core2ライブラリをインストール
    - スケッチ > ライブラリをインクルード > ライブラリを管理 から「M5Core2」を検索してインストール
 
-4. M5Stack Core2をUSBで接続し、ボードとポートを選択
+5. Arduino IDEでSampleApp.inoを開く
 
-5. スケッチをアップロード
+6. ボードの設定
+   - ツール > ボード > ESP32 Arduino > M5Stack-Core2 を選択
+   - ツール > ポート から接続されているM5Stack Core2のポートを選択
+
+7. スケッチをアップロード
+   - スケッチ > アップロード をクリック
 
 ## 使用方法
 
